@@ -13,6 +13,7 @@ import {
   Select,
   TextField,
 } from "@material-ui/core";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -26,13 +27,14 @@ const getCurrentDate = () => {
 };
 
 export default function DialogComponent({
-  open,
+  // open,
   handleDialogClose,
   handleSubmit,
   editTodo,
   isEditMode,
 }) {
   const classes = useStyles();
+  //These are local state hence there is no need to add it to redux.
   const [todoText, setTodoText] = useState("");
   const [priority, setPriority] = useState("Low");
   const [date, setDate] = useState(getCurrentDate());
@@ -45,7 +47,7 @@ export default function DialogComponent({
       setPriority(editTodo.priority);
       setDate(editTodo.due);
     } else {
-      console.log("Not Edit Mode");
+
       setTodoText("");
       setPriority("Low");
       setDate(getCurrentDate());
@@ -53,13 +55,13 @@ export default function DialogComponent({
   }, [isEditMode]);
 
   const formSubmit = () => {
-    const newTodo = {
+    let newTodo = {
       val: todoText,
       priority: priority,
       dueDate: date,
     };
 
-    // console.log(newTodo);
+
 
     handleSubmit(newTodo);
     handleDialogClose();
@@ -67,6 +69,10 @@ export default function DialogComponent({
     setPriority("Low");
     setDate(getCurrentDate());
   };
+  
+  //Setting open tp false from the redux store 
+  const open=useSelector((state) =>state.dialog.value);
+
 
   return (
     <Dialog open={open} onClose={handleDialogClose}>

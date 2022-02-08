@@ -4,6 +4,12 @@ import DialogComponent from "./component/DialogComponent";
 import Header from "./Header";
 import uuid from "react-uuid";
 import TodoDisplayComponent from "./component/TodoDisplayComponent";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { setOpenDialog, setCloseDialog } from "./Features/Dialog";
+import { setIsEditMode, setCloseEditMode } from "./Features/Edit";
+import { setMainTodos } from "./Features/MainTodos";
+import { setTodos } from "./Features/Todos";
 
 const getCurrentDate = () => {
   const now = new Date();
@@ -11,49 +17,63 @@ const getCurrentDate = () => {
 };
 
 function App() {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [todos, setTodos] = useState([]);
-  const [mainTodos, setMainTodos] = useState([]);
-  const [isEditMode, setIsEditMode] = useState(false);
   const [editTodo, setEditTodo] = useState({});
-  const [currentDate,setCurrentDate] = useState(getCurrentDate());
-  
+
+  //This is a local state so there is no need to add it to redux
+  const [currentDate, setCurrentDate] = useState(getCurrentDate());
+
+  //useSelectors
+  const isEditMode = useSelector((state) => state.edit.value);
+  const mainTodos = useSelector((state) => state.mainTodos.value);
+  const todos = useSelector((state) => state.todos.value);
+
+  //dispatch
+  const dispatch = useDispatch();
 
   const handleDialogOpen = () => {
-    setIsDialogOpen(true);
+    dispatch(setOpenDialog());
+
     if (isEditMode) {
-      setIsEditMode(true);
+      dispatch(setIsEditMode());
     }
   };
 
   const handleDialogClose = () => {
-    setIsDialogOpen(false);
-    setIsEditMode(false);
+    dispatch(setCloseDialog());
+    dispatch(setCloseEditMode());
   };
 
   const handleSubmit = (data) => {
     if (!isEditMode) {
-      setMainTodos([
-        ...mainTodos,
-        {
-          id: uuid(),
-          val: data.val,
-          priority: data.priority,
-          due: data.dueDate,
-        },
-      ]);
+      dispatch(
+        setMainTodos([
+          ...mainTodos,
+          {
+            id: uuid(),
+            val: data.val,
+            priority: data.priority,
+            due: data.dueDate,
+          },
+        ])
+      );
     } else {
-      const newTodos = [...todos];
-      const currentTodo = newTodos.find((t) => t.id === editTodo.id);
-      currentTodo.val = data.val;
-      currentTodo.priority = data.priority;
-      currentTodo.due = data.dueDate;
+      const currentTodo = todos.filter((t) => t.id !== editTodo.id);
+      dispatch(
+        setTodos([
+          ...currentTodo,
+          {
+            id: uuid(),
+            val: data.val,
+            priority: data.priority,
+            due: data.dueDate,
+          },
+        ])
+      );
     }
   };
 
   useEffect(() => {
     handleRenderTodo();
- 
   }, [mainTodos]);
 
   const handleRenderTodo = () => {
@@ -61,18 +81,18 @@ function App() {
     const currentTodos = [
       ...newTodos.filter((todo) => todo.due == getCurrentDate()),
     ];
-    setTodos(currentTodos);
+    dispatch(setTodos(currentTodos));
   };
 
   const handleDelete = (id) => {
     const newTodos = [...todos];
-    setTodos([...newTodos.filter((todo) => todo.id !== id)]);
+    dispatch(setTodos([...newTodos.filter((todo) => todo.id !== id)]));
   };
 
   const handleEditClick = (todo) => {
     setEditTodo(todo);
-    setIsEditMode(true);
-    setIsDialogOpen(true);
+    dispatch(setIsEditMode());
+    dispatch(setOpenDialog());
   };
 
   const handleNext = (data) => {
@@ -84,34 +104,33 @@ function App() {
 
     const currentTodos = [...mainTodos.filter((todo) => todo.id !== data.id)];
 
-    setMainTodos([
-      ...currentTodos,
-      {
-        id: newData.id,
-        val: newData.val,
-        priority: newData.priority,
-        due: date.toISOString().slice(0, 10),
-      },
-    ]);
+    dispatch(
+      setMainTodos([
+        ...currentTodos,
+        {
+          id: newData.id,
+          val: newData.val,
+          priority: newData.priority,
+          due: date.toISOString().slice(0, 10),
+        },
+      ])
+    );
   };
 
   const handleTodoNextDay = (action) => {
     let date = new Date(currentDate);
     let dayOfDate = date.getDate();
-    if(action=="next"){
+    if (action == "next") {
       date.setDate(dayOfDate + 1);
-    }
-    else{
+    } else {
       date.setDate(dayOfDate - 1);
     }
-    
-    const filterDate=date.toISOString().slice(0, 10);
+
+    const filterDate = date.toISOString().slice(0, 10);
     const newTodos = [...mainTodos];
-    const currentTodos = [
-      ...newTodos.filter((todo) => todo.due == filterDate),
-    ];
-    setTodos(currentTodos);
-    setCurrentDate(filterDate)
+    const currentTodos = [...newTodos.filter((todo) => todo.due == filterDate)];
+    dispatch(setTodos(currentTodos));
+    setCurrentDate(filterDate);
   };
 
   return (
@@ -132,7 +151,6 @@ function App() {
       </Container>
       <DialogComponent
         handleDialogClose={handleDialogClose}
-        open={isDialogOpen}
         handleSubmit={handleSubmit}
         editTodo={editTodo}
         isEditMode={isEditMode}

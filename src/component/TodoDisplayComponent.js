@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   Chip,
   Grid,
@@ -27,30 +27,28 @@ export default function TodoDisplayComponent({
 }) {
   const classes = useStyles();
   const [backgroundColor, setBackgroundColor] = useState("#FFFFFF");
-  const [done,setDone]=useState(false)
+  const [done, setDone] = useState(false);
 
-  const handleDone = () => {
-    if(done==false){
+  const handleDone = (id) => {
+    if (done == false) {
       setBackgroundColor("#0FBD86");
       setDone(true);
-    }else{
+    } else {
       setBackgroundColor("#FFFFFF");
-      setDone(false)
+      setDone(false);
     }
   };
 
-
   return (
-    <Grid
-      container
-      direction="column"
-      spacing={2}
-      
-    >
+    <Grid container direction="column" spacing={2}>
       {todos.map((todo) => {
         return (
-          <Grid item key={todo.id} >
-            <Paper className={classes.todoItems} elevation={3} style={{ backgroundColor: `${backgroundColor}` }}>
+          <Grid item key={todo.id}>
+            <Paper
+              className={classes.todoItems}
+              elevation={3}
+              style={{ backgroundColor: `${backgroundColor}` }}
+            >
               <Grid container justifyContent="space-between">
                 <Grid item>
                   <Typography variant="h6">{todo.val}</Typography>
@@ -83,7 +81,12 @@ export default function TodoDisplayComponent({
                 >
                   <EditIcon />
                 </IconButton>
-                <IconButton color="primary" onClick={handleDone}>
+                <IconButton
+                  color="primary"
+                  onClick={() => {
+                    handleDone(todo.id);
+                  }}
+                >
                   <DoneIcon />
                 </IconButton>
                 <IconButton color="primary" onClick={() => handleNext(todo)}>
