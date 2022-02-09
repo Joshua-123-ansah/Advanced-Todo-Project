@@ -5,6 +5,9 @@ import { Add } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/styles";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
+// import { bindActionCreators } from "redux";
+// import { useDispatch } from "react-redux";
+// import { actionCreators } from "./store/index";
 
 const useStyles = makeStyles({
   main: {
@@ -33,6 +36,8 @@ export default function Header({
   currentDate,
 }) {
   const classes = useStyles();
+  // const dispatch = useDispatch();
+  // const { setOPenDialog } = bindActionCreators(actionCreators, dispatch);
 
   return (
     <>
@@ -72,7 +77,13 @@ export default function Header({
           </Grid>
         </Grid>
         <Grid item>
-          <Fab color="primary" arial-label="add" onClick={handleDialogOpen}>
+          <Fab
+            color="primary"
+            arial-label="add"
+            onClick={() => {
+              handleDialogOpen();
+            }}
+          >
             <Add />
           </Fab>
         </Grid>

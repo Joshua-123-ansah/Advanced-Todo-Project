@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Chip,
   Grid,
@@ -13,6 +13,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import DoneIcon from "@material-ui/icons/Done";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 
+
 const useStyles = makeStyles({
   todoItems: {
     padding: "15px",
@@ -26,16 +27,12 @@ export default function TodoDisplayComponent({
   handleNext,
 }) {
   const classes = useStyles();
-  const [backgroundColor, setBackgroundColor] = useState("#FFFFFF");
-  const [done, setDone] = useState(false);
+  const [clicked, setClicked] = useState([]);
 
-  const handleDone = (id) => {
-    if (done == false) {
-      setBackgroundColor("#0FBD86");
-      setDone(true);
-    } else {
-      setBackgroundColor("#FFFFFF");
-      setDone(false);
+  const handleDone = (todoID) => {
+    if (!clicked.includes(todoID)) setClicked([...clicked, todoID]);
+    else {
+      setClicked(clicked.filter((id) => todoID != id));
     }
   };
 
@@ -43,11 +40,15 @@ export default function TodoDisplayComponent({
     <Grid container direction="column" spacing={2}>
       {todos.map((todo) => {
         return (
-          <Grid item key={todo.id}>
+          <Grid item key={todo.id} component="div">
             <Paper
               className={classes.todoItems}
               elevation={3}
-              style={{ backgroundColor: `${backgroundColor}` }}
+              style={{
+                backgroundColor: `${
+                  clicked.includes(todo.id) ? "Green" : "white"
+                }`,
+              }}
             >
               <Grid container justifyContent="space-between">
                 <Grid item>

@@ -71,8 +71,7 @@ export default function DialogComponent({
   };
   
   //Setting open tp false from the redux store 
-  const open=useSelector((state) =>state.dialog.value);
-
+  const open=useSelector((state) =>state.dialog);
 
   return (
     <Dialog open={open} onClose={handleDialogClose}>
