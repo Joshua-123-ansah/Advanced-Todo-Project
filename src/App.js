@@ -24,8 +24,7 @@ function App() {
   const isEditMode = useSelector((state) => state.edit);
   const mainTodos = useSelector((state) => state.mainTodo);
   const todos = useSelector((state) => state.todos);
-  const t = useSelector((state) => state);
-  console.log(t);
+
 
   //dispatch
   const dispatch = useDispatch();
@@ -101,7 +100,7 @@ function App() {
 
   const handleNext = (data) => {
     const newData = data;
-    delete mainTodos[data.id];
+
     let date = new Date(newData.due);
     let dayOfDate = date.getDate();
     date.setDate(dayOfDate + 1);
@@ -131,6 +130,8 @@ function App() {
     const filterDate = date.toISOString().slice(0, 10);
     const newTodos = [...mainTodos];
     const currentTodos = [...newTodos.filter((todo) => todo.due == filterDate)];
+    setTodos(currentTodos);
+    setCurrentDate(filterDate);
   };
 
   return (
