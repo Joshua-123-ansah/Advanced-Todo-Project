@@ -5,9 +5,7 @@ import { Add } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/styles";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
-// import { bindActionCreators } from "redux";
-// import { useDispatch } from "react-redux";
-// import { actionCreators } from "./store/index";
+
 
 const useStyles = makeStyles({
   main: {
@@ -36,14 +34,14 @@ export default function Header({
   currentDate,
 }) {
   const classes = useStyles();
-  // const dispatch = useDispatch();
-  // const { setOPenDialog } = bindActionCreators(actionCreators, dispatch);
 
   return (
     <>
       <Grid container justifyContent="space-between" className={classes.main}>
         <Grid item>
-          <Typography variant="h4">TODO</Typography>
+          <Typography variant="h4" data-testid="todo">
+            TODO
+          </Typography>
         </Grid>
         <Grid
           container
@@ -53,6 +51,7 @@ export default function Header({
           <Grid item className={classes.todayEle}>
             <IconButton
               color="primary"
+              data-testid="backward-button"
               onClick={() => {
                 handleTodoNextDay("prev");
               }}
@@ -61,13 +60,14 @@ export default function Header({
             </IconButton>
           </Grid>
           <Grid item className={classes.todayEle}>
-            <Typography variant="h4">
+            <Typography variant="h4" data-testid="date">
               {currentDate == getCurrentDate() ? "Today" : currentDate}
             </Typography>
           </Grid>
           <Grid item className={classes.todayEle}>
             <IconButton
               color="primary"
+              data-testid="forward-button"
               onClick={() => {
                 handleTodoNextDay("next");
               }}
@@ -79,6 +79,7 @@ export default function Header({
         <Grid item>
           <Fab
             color="primary"
+            data-testid="fab-button"
             arial-label="add"
             onClick={() => {
               handleDialogOpen();

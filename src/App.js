@@ -25,7 +25,6 @@ function App() {
   const mainTodos = useSelector((state) => state.mainTodo);
   const todos = useSelector((state) => state.todos);
 
-
   //dispatch
   const dispatch = useDispatch();
   const {
@@ -154,7 +153,6 @@ function App() {
         handleDialogClose={handleDialogClose}
         handleSubmit={handleSubmit}
         editTodo={editTodo}
-        isEditMode={isEditMode}
       />
     </>
   );

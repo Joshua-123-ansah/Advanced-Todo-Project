@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect} from "react";
 import {
   Button,
   Dialog,
@@ -14,6 +14,7 @@ import {
   TextField,
 } from "@material-ui/core";
 import { useSelector } from "react-redux";
+import { AllHooks } from "../hooks";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -31,23 +32,22 @@ export default function DialogComponent({
   handleDialogClose,
   handleSubmit,
   editTodo,
-  isEditMode,
 }) {
   const classes = useStyles();
-  //These are local state hence there is no need to add it to redux.
-  const [todoText, setTodoText] = useState("");
-  const [priority, setPriority] = useState("Low");
-  const [date, setDate] = useState(getCurrentDate());
 
+  const { todoText, setTodoText, priority, setPriority, date, setDate } =
+    AllHooks();
+
+  //Setting open tp false from the redux store
+  const open = useSelector((state) => state.dialog);
+  const isEditMode = useSelector((state) => state.edit);
 
   useEffect(() => {
     if (isEditMode) {
-
       setTodoText(editTodo.val);
       setPriority(editTodo.priority);
       setDate(editTodo.due);
     } else {
-
       setTodoText("");
       setPriority("Low");
       setDate(getCurrentDate());
@@ -61,17 +61,12 @@ export default function DialogComponent({
       dueDate: date,
     };
 
-
-
     handleSubmit(newTodo);
     handleDialogClose();
     setTodoText("");
     setPriority("Low");
     setDate(getCurrentDate());
   };
-  
-  //Setting open tp false from the redux store 
-  const open=useSelector((state) =>state.dialog);
 
   return (
     <Dialog open={open} onClose={handleDialogClose}>
@@ -120,7 +115,7 @@ export default function DialogComponent({
       </DialogContent>
       <DialogActions>
         <Button onClick={handleDialogClose}>Cancel</Button>
-        <Button color="primary" onClick={formSubmit}>
+        <Button data-testid="submit" color="primary" onClick={formSubmit}>
           {isEditMode ? "Update" : "Add"}
         </Button>
       </DialogActions>
