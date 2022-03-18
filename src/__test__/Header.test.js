@@ -89,7 +89,7 @@ test("Test to ensure that backwards arrow work correctly and the date content is
 test("Test to ensure that forward arrows work correctly and the date content is changed respectively", () => {
   const handleDialogOpen = jest.fn();
   const handleTodoNextDay = jest.fn();
-  const currentDate = new Date("03/13/2022").toISOString().slice(0, 10);
+  const currentDate = new Date("03/14/2022").toISOString().slice(0, 10);
 
   const { getByTestId } = render(
     <Header
@@ -104,5 +104,5 @@ test("Test to ensure that forward arrows work correctly and the date content is 
 
   fireEvent.click(forwardButton);
   expect(handleTodoNextDay).toHaveBeenCalledTimes(1);
-  expect(date.textContent).toBe("2022-03-13");
+  expect(date.textContent).toBe("2022-03-14");
 });
