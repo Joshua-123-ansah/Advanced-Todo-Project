@@ -1,4 +1,4 @@
-import React, { useEffect} from "react";
+import React, { useEffect } from "react";
 import {
   Button,
   Dialog,
@@ -70,12 +70,14 @@ export default function DialogComponent({
 
   return (
     <Dialog open={open} onClose={handleDialogClose}>
-      <DialogTitle>{isEditMode ? "Update" : "Add Todo"}</DialogTitle>
+      <DialogTitle variant="h4">
+        {isEditMode ? "Update" : "Add Todo"}
+      </DialogTitle>
       <DialogContent>
         <Grid container direction="column" spacing={2}>
           <Grid item>
             <TextField
-              label="Todo Text....."
+              placeholder="Todo Text....."
               variant="outlined"
               name="todoText"
               onChange={(e) => setTodoText(e.target.value)}
@@ -87,11 +89,12 @@ export default function DialogComponent({
             <FormControl className={classes.formControl} variant="filled">
               <InputLabel id="priority">Priority</InputLabel>
               <Select
-                name="priorityType"
+                label="priorityType"
                 onChange={(e) => setPriority(e.target.value)}
+                data-testid="Priority"
                 value={priority}
               >
-                <MenuItem value="Low">Low</MenuItem>
+                <MenuItem value="Low" >Low</MenuItem>
                 <MenuItem value="Med">Med</MenuItem>
                 <MenuItem value="High">High</MenuItem>
               </Select>
@@ -115,7 +118,7 @@ export default function DialogComponent({
       </DialogContent>
       <DialogActions>
         <Button onClick={handleDialogClose}>Cancel</Button>
-        <Button data-testid="submit" color="primary" onClick={formSubmit}>
+        <Button color="primary" onClick={formSubmit}>
           {isEditMode ? "Update" : "Add"}
         </Button>
       </DialogActions>

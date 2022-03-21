@@ -13,7 +13,6 @@ import EditIcon from "@material-ui/icons/Edit";
 import DoneIcon from "@material-ui/icons/Done";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 
-
 const useStyles = makeStyles({
   todoItems: {
     padding: "15px",
@@ -43,6 +42,7 @@ export default function TodoDisplayComponent({
           <Grid item key={todo.id} component="div">
             <Paper
               className={classes.todoItems}
+              data-testid="todoid"
               elevation={3}
               style={{
                 backgroundColor: `${
@@ -72,7 +72,7 @@ export default function TodoDisplayComponent({
                     handleDelete(todo.id);
                   }}
                 >
-                  <DeleteIcon />
+                  <DeleteIcon title="deleteIcon" />
                 </IconButton>
                 <IconButton
                   color="primary"

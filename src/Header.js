@@ -6,7 +6,6 @@ import { makeStyles } from "@material-ui/styles";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 
-
 const useStyles = makeStyles({
   main: {
     // backgroundColor: "red",
@@ -39,9 +38,7 @@ export default function Header({
     <>
       <Grid container justifyContent="space-between" className={classes.main}>
         <Grid item>
-          <Typography variant="h4" data-testid="todo">
-            TODO
-          </Typography>
+          <Typography variant="h4">TODO</Typography>
         </Grid>
         <Grid
           container
@@ -61,7 +58,7 @@ export default function Header({
           </Grid>
           <Grid item className={classes.todayEle}>
             <Typography variant="h4" data-testid="date">
-              {currentDate == getCurrentDate() ? "Today" : currentDate}
+              {currentDate === getCurrentDate() ? "Today" : currentDate}
             </Typography>
           </Grid>
           <Grid item className={classes.todayEle}>
